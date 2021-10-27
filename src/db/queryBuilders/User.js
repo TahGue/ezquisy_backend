@@ -18,8 +18,9 @@ class User {
   }
   //update
 
-  static async update(id, data) {
-    return db('user').where('id', id).update(data);
+  static async update(data) {
+    const { id, ...toUpdate } = data;
+    return db('user').returning('*').where('id', '=', id).update(toUpdate);
   }
   //delete
 

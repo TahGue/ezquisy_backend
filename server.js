@@ -1,17 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+
 const user = require('./src/routes/user');
 dotenv.config({ path: './config.env' });
 const app = express();
 
-app.get('/', function (req, res) {
-  res.send('GET request to the homepage');
-});
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-app.post('/', function (req, res) {
-  res.send('POST request to the server');
-});
 app.use('/user', user);
 
 app.listen(process.env.PORT, function () {
