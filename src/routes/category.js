@@ -1,10 +1,10 @@
 const express = require('express');
-const User = require('../db/queryBuilders/User');
+const Category = require('../db/queryBuilders/Category');
 const router = express.Router();
 
 // select all
 router.get('/all', (req, res) => {
-  return User.getAll()
+  return Category.getAll()
     .then((data) => {
       res.send(data);
     })
@@ -16,15 +16,12 @@ router.get('/all', (req, res) => {
 // select one
 router.get('/', (req, res) => {
   const { id } = req.query;
-  return User.getById(id)
+  return Category.getById(id)
     .then((data) => {
       if (data.length <= 0) {
-        return res.sendStatus(404).send('not found');
+        res.sendStatus(404).send('not found');
       }
-      else{
-        return res.send(data);
-      }
-      
+      res.send(data);
     })
     .catch((err) => {
       res.sendStatus(500).send(err);
@@ -33,7 +30,7 @@ router.get('/', (req, res) => {
 // insert
 router.post('/', (req, res) => {
   const data = req.body;
-  return User.insert(data)
+  return Category.insert(data)
     .then((data) => {
       res.send(data);
     })
@@ -44,7 +41,7 @@ router.post('/', (req, res) => {
 // update
 router.put('/', (req, res) => {
   const data = req.body;
-  return User.update(data)
+  return Category.update(data)
     .then((data) => {
       return res.json(data);
     })
@@ -56,7 +53,7 @@ router.put('/', (req, res) => {
 router.delete('/', (req, res) => {
   const id = req.query.id;
 
-  return User.delete(id)
+  return Category.delete(id)
     .then((data) => {
       return res.json(data);
     })
