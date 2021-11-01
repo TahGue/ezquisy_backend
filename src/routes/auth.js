@@ -1,16 +1,16 @@
-const express = require("express");
-const asyncMiddleware = require("../db/middlewares/async");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const express = require('express');
+const asyncMiddleware = require('../db/middlewares/async');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-const Category = require("../db/queryBuilders/Category");
-const User = require("../db/queryBuilders/User");
-const { restart } = require("nodemon");
+const Category = require('../db/queryBuilders/Category');
+const User = require('../db/queryBuilders/User');
+const { restart } = require('nodemon');
 const router = express.Router();
 
 // login
 router.post(
-  "/login",
+  '/login',
   asyncMiddleware(async (req, res) => {
     // recieve email password
     const { email, password } = req.body;
@@ -36,29 +36,34 @@ router.post(
           (err, token) => {
             res.json({
               success: true,
-              token: "bearer " + token,
+              token: 'bearer ' + token,
             });
           }
         );
       } else {
-        res.sendStatus(400).send("not auth");
+        res.sendStatus(400).send('not auth');
       }
     } else {
-      res.sendStatus(400).send("not auth");
+      res.sendStatus(400).send('not auth');
     }
 
     //
   })
 );
+
 // Register
 router.post(
-  "/register",
+  '/register',
   asyncMiddleware(async (req, res) => {
+    // fetch data from register form
     const { name, email, password, image } = req.body;
+    // check if email is exist in db
     const [userByEmail] = await User.getByEmail(email);
+    // if user email is exist:
     if (userByEmail) {
-      return res.send("User already exist");
+      return res.send('User already exist');
     }
+    // user email is not exist
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, (err, hash) => {
         if (err) throw err;
@@ -68,7 +73,7 @@ router.post(
           email,
           image,
           password: hash,
-        }).then(us=>res.send(us))
+        }).then((us) => res.send(us));
       });
     });
   })
