@@ -1,9 +1,9 @@
-const express = require('express');
-const User = require('../db/queryBuilders/User');
+const express = require("express");
+const User = require("../db/queryBuilders/User");
 const router = express.Router();
 
 // select all
-router.get('/all', (req, res) => {
+router.get("/all", (req, res) => {
   return User.getAll()
     .then((data) => {
       res.send(data);
@@ -14,24 +14,22 @@ router.get('/all', (req, res) => {
 });
 
 // select one
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
   const { id } = req.query;
   return User.getById(id)
     .then((data) => {
       if (data.length <= 0) {
-        return res.sendStatus(404).send('not found');
-      }
-      else{
+        return res.sendStatus(404).send("not found");
+      } else {
         return res.send(data);
       }
-      
     })
     .catch((err) => {
       res.sendStatus(500).send(err);
     });
 });
 // insert
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   const data = req.body;
   return User.insert(data)
     .then((data) => {
@@ -42,7 +40,7 @@ router.post('/', (req, res) => {
     });
 });
 // update
-router.put('/', (req, res) => {
+router.put("/", (req, res) => {
   const data = req.body;
   return User.update(data)
     .then((data) => {
@@ -53,7 +51,7 @@ router.put('/', (req, res) => {
     });
 });
 // delete
-router.delete('/', (req, res) => {
+router.delete("/", (req, res) => {
   const id = req.query.id;
 
   return User.delete(id)
