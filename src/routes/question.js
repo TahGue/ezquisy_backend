@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const asyncMiddleware = require('../db/middlewares/async');
 const Question = require('../db/queryBuilders/Question');
 const router = express.Router();
@@ -6,6 +7,7 @@ const router = express.Router();
 // select all
 router.get(
   '/all',
+  passport.authenticate('jwt', { session: false }),
   asyncMiddleware(async (req, res) => {
     const questions = await Question.getAll();
     res.send(questions);

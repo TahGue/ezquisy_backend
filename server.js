@@ -8,14 +8,20 @@ const questionType = require('./src/routes/questionType');
 const category = require('./src/routes/category');
 const question = require('./src/routes/question');
 
+const passportConfig = require('./src/config/passport');
+
 dotenv.config({ path: './config.env' });
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(bodyParser.json());
-app.use ('/auth', auth)
+
+app.use(passportConfig.initialize());
+
+app.use('/auth', auth);
 app.use('/question', question);
-app.use('/category', category); 
+app.use('/category', category);
 
 app.use('/user', user);
 app.use('/questiontype', questionType);
@@ -23,4 +29,3 @@ app.use('/questiontype', questionType);
 app.listen(process.env.PORT, function () {
   console.log('server is runing  in port ' + process.env.PORT);
 });
- 
