@@ -1,10 +1,10 @@
 const express = require("express");
-const Question = require("../db/queryBuilders/Question");
+const QuestionCategory = require("../db/queryBuilders/QuestionCategory");
 const router = express.Router();
 
 // select all
 router.get("/all", (req, res) => {
-  return Question.getAll()
+  return QuestionCategory.getAll()
     .then((data) => {
       res.send(data);
     })
@@ -16,7 +16,7 @@ router.get("/all", (req, res) => {
 // select one
 router.get("/", (req, res) => {
   const { id } = req.query;
-  return Question.getById(id)
+  return QuestionCategory.getById(id)
     .then((data) => {
       if (data.length <= 0) {
         res.sendStatus(404).send("not found");
@@ -30,7 +30,7 @@ router.get("/", (req, res) => {
 // insert
 router.post("/", (req, res) => {
   const data = req.body;
-  return Question.insert(data)
+  return QuestionCategory.insert(data)
     .then((data) => {
       res.send(data);
     })
@@ -41,7 +41,7 @@ router.post("/", (req, res) => {
 // update
 router.put("/", (req, res) => {
   const data = req.body;
-  return Question.update(data)
+  return QuestionCategory.update(data)
     .then((data) => {
       return res.json(data);
     })
@@ -53,7 +53,7 @@ router.put("/", (req, res) => {
 router.delete("/", (req, res) => {
   const id = req.query.id;
 
-  return Question.delete(id)
+  return QuestionCategory.delete(id)
     .then((data) => {
       return res.json(data);
     })
