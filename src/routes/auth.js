@@ -1,15 +1,16 @@
-const express = require('express');
-const asyncMiddleware = require('../db/middlewares/async');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const express = require("express");
+const asyncMiddleware = require("../db/middlewares/async");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const Category = require('../db/queryBuilders/Category');
-const User = require('../db/queryBuilders/User');
+const Category = require("../db/queryBuilders/Category");
+const User = require("../db/queryBuilders/User");
+const { restart } = require("nodemon");
 const router = express.Router();
 
 // login
 router.post(
-  '/login',
+  "/login",
   asyncMiddleware(async (req, res) => {
     // recieve email password
     const { email, password } = req.body;
@@ -35,19 +36,41 @@ router.post(
           (err, token) => {
             res.json({
               success: true,
-              token: 'bearer ' + token,
+              token: "bearer " + token,
             });
           }
         );
       } else {
-        res.sendStatus(400).send('not auth');
+        res.sendStatus(400).send("not auth");
       }
     } else {
-      res.sendStatus(400).send('not auth');
+      res.sendStatus(400).send("not auth");
     }
 
     //
   })
 );
+// Register
+router.post(
+  "/register",
+  asyncMiddleware(async (req, res) => {
+    const { name, email, password, image } = req.body;
+    const [userByEmail] = await User.getByEmail(email);
+    if (userByEmail) {
+      return res.send("User already exist");
+    }
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) throw err;
 
+        User.insert({
+          name,
+          email,
+          image,
+          password: hash,
+        }).then(us=>res.send(us))
+      });
+    });
+  })
+);
 module.exports = router;
