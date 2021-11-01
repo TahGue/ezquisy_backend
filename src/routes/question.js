@@ -1,25 +1,27 @@
-const express = require("express");
-const Question = require("../db/queryBuilders/Question");
+const express = require('express');
+const passport = require('passport');
+const asyncMiddleware = require('../db/middlewares/async');
+const Question = require('../db/queryBuilders/Question');
 const router = express.Router();
 
 // select all
-router.get("/all", (req, res) => {
-  return Question.getAll()
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.sendStatus(500).send(err);
-    });
-});
+router.get(
+  '/all',
+  passport.authenticate('jwt', { session: false }),
+  asyncMiddleware(async (req, res) => {
+    const questions = await Question.getAll();
+    res.send(questions);
+  })
+);
 
 // select one
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
   const { id } = req.query;
+  const questions = await;
   return Question.getById(id)
     .then((data) => {
       if (data.length <= 0) {
-        res.sendStatus(404).send("not found");
+        res.sendStatus(404).send('not found');
       }
       res.send(data);
     })
@@ -28,7 +30,7 @@ router.get("/", (req, res) => {
     });
 });
 // insert
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   const data = req.body;
   return Question.insert(data)
     .then((data) => {
@@ -39,7 +41,7 @@ router.post("/", (req, res) => {
     });
 });
 // update
-router.put("/", (req, res) => {
+router.put('/', (req, res) => {
   const data = req.body;
   return Question.update(data)
     .then((data) => {
@@ -50,7 +52,7 @@ router.put("/", (req, res) => {
     });
 });
 // delete
-router.delete("/", (req, res) => {
+router.delete('/', (req, res) => {
   const id = req.query.id;
 
   return Question.delete(id)

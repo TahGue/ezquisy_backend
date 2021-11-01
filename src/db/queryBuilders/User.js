@@ -11,6 +11,10 @@ class User {
   static async getById(id) {
     return db('user').select('*').where('id', '=', id);
   }
+
+  static async getByEmail(email) {
+    return db('user').select('*').where('email', '=', email);
+  }
   // insert
 
   static async insert(data) {
