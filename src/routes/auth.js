@@ -58,6 +58,7 @@ router.post(
   '/register',
   asyncMiddleware(async (req, res) => {
     // fetch data from register form
+    console.log (req.body);
     const { name, email, password, image } = req.body;
     // check if email is exist in db
     const [userByEmail] = await User.getByEmail(email);
@@ -73,7 +74,8 @@ router.post(
         User.insert({
           name,
           email,
-          image,
+          image:"",
+          role:"user",
           password: hash,
         }).then((us) => res.send(us));
       });
