@@ -13,6 +13,8 @@ const passportConfig = require('./src/config/passport');
 dotenv.config({ path: './config.env' });
 const app = express();
 
+app.use(cors());
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());

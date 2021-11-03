@@ -13,6 +13,8 @@ router.post(
   '/login',
   asyncMiddleware(async (req, res) => {
     // recieve email password
+    console.log('req.body');
+    console.log(req.body);
     const { email, password } = req.body;
 
     // check email is exist
