@@ -18,6 +18,14 @@ router.get(
   }
 );
 
+router.get(
+  '/current',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    return res.json(req.user);
+  }
+);
+
 // select one
 router.get('/', (req, res) => {
   const { id } = req.query;
