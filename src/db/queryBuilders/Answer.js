@@ -11,7 +11,11 @@ class Answer {
   static async getById(id) {
     return db('answer').select('*').where('id', '=', id);
   }
+
   // insert
+  static async getByQuestions(id) {
+    return db('answer').select('*').whereIn('question_id', id);
+  }
 
   static async insert(data) {
     return db('answer').insert(data);
@@ -20,10 +24,7 @@ class Answer {
 
   static async update(data) {
     const { id, ...toUpdate } = data;
-    return db('answer')
-      .returning('*')
-      .where('id', '=', id)
-      .update(toUpdate);
+    return db('answer').returning('*').where('id', '=', id).update(toUpdate);
   }
   //delete
 
