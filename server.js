@@ -7,6 +7,8 @@ const user = require('./src/routes/user');
 const questionType = require('./src/routes/questionType');
 const category = require('./src/routes/category');
 const question = require('./src/routes/question');
+const answer = require('./src/routes/answer');
+const questioncategory = require('./src/routes/questioncategory'); 
 
 const passportConfig = require('./src/config/passport');
 
@@ -24,10 +26,10 @@ app.use(passportConfig.initialize());
 app.use('/auth', auth);
 app.use('/question', question);
 app.use('/category', category);
-
+app.use('/answer', answer);
 app.use('/user', user);
 app.use('/questiontype', questionType);
-
+app.use('/questioncategory', questioncategory);
 app.listen(process.env.PORT, function () {
   console.log('server is runing  in port ' + process.env.PORT);
 });

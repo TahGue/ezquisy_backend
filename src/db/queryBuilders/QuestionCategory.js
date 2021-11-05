@@ -11,6 +11,11 @@ class QuestionCategory {
   static async getById(id) {
     return db("questioncategory").select("*").where("id", "=", id);
   }
+
+  static async getByCategory(id) {
+    return db("questioncategory").select("question.*").join("question","question.id","=" , "questioncategory.question_id").where("category_id", "=", id);
+  }
+
   // insert
 
   static async insert(data) {
