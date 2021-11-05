@@ -27,6 +27,8 @@ router.get("/", (req, res) => {
       res.sendStatus(500).send(err);
     });
 });
+
+
 // insert
 router.post("/", (req, res) => {
   const data = req.body;
