@@ -3,8 +3,8 @@ const passport = require('passport');
 const asyncMiddleware = require('../db/middlewares/async');
 const Question = require('../db/queryBuilders/Question');
 const router = express.Router();
-const QuestionCategory= require("../db/queryBuilders/QuestionCategory");
-
+const QuestionCategory = require('../db/queryBuilders/QuestionCategory');
+const Answer = require('../db/queryBuilders/Answer');
 // select all
 router.get(
   '/all',
@@ -14,12 +14,28 @@ router.get(
     res.send(questions);
   })
 );
-router.get("/category",passport.authenticate('jwt', { session: false }),
-asyncMiddleware(async (req, res) => {
-  const {id} = req.query;
-  const questions = await QuestionCategory.getByCategory(id);
-  res.send(questions);
-}));
+router.get(
+  '/category',
+  //  passport.authenticate('jwt', { session: false }),
+  asyncMiddleware(async (req, res) => {
+    const { id } = req.query;
+    // fetch category questions
+    const questions = await QuestionCategory.getByCategory(id);
+    // make array of questions ids [1,2,3,4]
+    const questionsIds = questions.map((qu) => qu.id);
+    // fetch answers by questions ids
+    const answers = await Answer.getByQuestions(questionsIds);
+    // bind answers witth queestion
+
+    const results = questions.map((question) => {
+      question.answers = answers.filter(
+        (answer) => answer.question_id === question.id
+      );
+      return question;
+    });
+    res.send(results);
+  })
+);
 // select one
 router.get('/', (req, res) => {
   const { id } = req.query;

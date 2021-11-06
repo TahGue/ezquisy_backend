@@ -8,7 +8,7 @@ const questionType = require('./src/routes/questionType');
 const category = require('./src/routes/category');
 const question = require('./src/routes/question');
 const answer = require('./src/routes/answer');
-const questioncategory = require('./src/routes/questioncategory'); 
+const questioncategory = require('./src/routes/questioncategory');
 
 const passportConfig = require('./src/config/passport');
 
