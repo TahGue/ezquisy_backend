@@ -1,7 +1,8 @@
 const express = require('express');
 const Answer = require('../db/queryBuilders/Answer');
 const router = express.Router();
-
+const passport = require('passport');
+const asyncMiddleware = require('../db/middlewares/async');
 // select all
 router.get('/all', (req, res) => {
   return Answer.getAll()
@@ -27,6 +28,19 @@ router.get('/', (req, res) => {
       res.sendStatus(500).send(err);
     });
 });
+
+// select question answers
+router.get(
+  '/question',
+  passport.authenticate('jwt', { session: false }),
+  asyncMiddleware(async (req, res) => {
+    const { id } = req.query;
+    const answrs = await Answer.getByQuestions([id]);
+
+    res.send(answrs);
+  })
+);
+
 // insert
 router.post('/', (req, res) => {
   const data = req.body;

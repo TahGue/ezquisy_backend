@@ -20,6 +20,14 @@ class QuestionCategory {
       .orderBy('question.id', 'asc');
   }
 
+  static async getByQuestion(id) {
+    return db('questioncategory')
+      .select('category.*', 'questioncategory.question_id')
+      .join('category', 'category.id', '=', 'questioncategory.category_id')
+      .whereIn('question_id', id)
+      .orderBy('category.id', 'asc');
+  }
+
   // insert
 
   static async insert(data) {
@@ -39,6 +47,11 @@ class QuestionCategory {
   static async delete(id) {
     return db('questioncategory').where('id', '=', id).del();
   }
+
+  static async deleteByQuestion(id) {
+    return db('questioncategory').where('question_id', '=', id).del();
+  }
+
   static async getCategoryQuestions(id) {
     return db('questioncategory')
       .select('question.*', 'questioncategory.*')
