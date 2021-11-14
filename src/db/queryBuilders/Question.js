@@ -20,10 +20,7 @@ class Question {
 
   static async update(data) {
     const { id, ...toUpdate } = data;
-    return db('question')
-      .returning('*')
-      .where('id', '=', id)
-      .update(toUpdate);
+    return db('question').where('id', '=', id).update(toUpdate);
   }
   //delete
 
