@@ -42,16 +42,11 @@ router.get(
 );
 
 // insert
-router.post('/', (req, res) => {
+router.post('/', asyncMiddleware(async (req, res) => {
   const data = req.body;
-  return Answer.insert(data)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.sendStatus(500).send(err);
-    });
-});
+  const result = Answer.insert(data)
+   res.send(result);
+}));
 // update
 router.put('/', (req, res) => {
   const data = req.body;
