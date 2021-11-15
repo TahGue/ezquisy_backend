@@ -14,7 +14,7 @@ class Answer {
 
   // insert
   static async getByQuestions(id) {
-    return db('answer').select('answer.*').whereIn('question_id', id);
+    return db('answer').select('answer.*').whereIn('answer.question_id', id);
   }
 
   static async insert(data) {
