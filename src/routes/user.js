@@ -32,7 +32,7 @@ router.get(
       ...user,
       userPoints,
     };
-    return res.json(results);
+    return res.json(req.user);
   })
 );
 
