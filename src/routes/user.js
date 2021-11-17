@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../db/queryBuilders/User');
 const router = express.Router();
 const passport = require('passport');
+const asyncMiddleware = require('../db/middlewares/async');
 
 // select all
 router.get(
@@ -21,9 +22,18 @@ router.get(
 router.get(
   '/current',
   passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    return res.json(req.user);
-  }
+  asyncMiddleware(async (req, res) => {
+    const [user] = req.user;
+    console.log('user');
+    console.log(user);
+    const userPoints = await User.getPoints(user.id);
+
+    const results = {
+      ...user,
+      userPoints,
+    };
+    return res.json(results);
+  })
 );
 
 // select one

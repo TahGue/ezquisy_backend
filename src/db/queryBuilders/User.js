@@ -15,6 +15,30 @@ class User {
   static async getByEmail(email) {
     return db('user').select('*').where('email', '=', email);
   }
+
+  static async getPoints(userId) {
+    // step 1 fetch correct answers by user
+
+    const userAnswers = await db('answer')
+      .select('answer.*')
+      .join('answeruser', 'answeruser.answer_id', '=', 'answer.id')
+      .where('answeruser.user_id', '=', userId)
+      .where('answer.is_correct', '=', 'true');
+
+    console.log('userAnswers');
+    console.log(userAnswers);
+    // fetch questions by step 1
+    const questionsIds = userAnswers.map((ans) => ans.question_id);
+
+    const questions = await db('question')
+      .sum('question.point')
+      .whereIn('question.id', questionsIds)
+      .groupBy('question.id');
+    console.log('questions');
+    console.log(questions);
+    return questions;
+    // sum points
+  }
   // insert
 
   static async insert(data) {

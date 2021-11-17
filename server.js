@@ -8,6 +8,7 @@ const questionType = require('./src/routes/questionType');
 const category = require('./src/routes/category');
 const question = require('./src/routes/question');
 const answer = require('./src/routes/answer');
+const answerUser = require('./src/routes/answeruser');
 const questioncategory = require('./src/routes/questioncategory');
 
 const passportConfig = require('./src/config/passport');
@@ -28,6 +29,7 @@ app.use('/question', question);
 app.use('/category', category);
 app.use('/answer', answer);
 app.use('/user', user);
+app.use('/answeruser', answerUser);
 app.use('/questiontype', questionType);
 app.use('/questioncategory', questioncategory);
 app.listen(process.env.PORT, function () {
