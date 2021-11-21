@@ -24,20 +24,20 @@ class User {
       .join('answeruser', 'answeruser.answer_id', '=', 'answer.id')
       .where('answeruser.user_id', '=', userId)
       .where('answer.is_correct', '=', 'true');
-
-    console.log('userAnswers');
-    console.log(userAnswers);
     // fetch questions by step 1
     const questionsIds = userAnswers.map((ans) => ans.question_id);
 
     const questions = await db('question')
-      .sum('question.point')
-      .whereIn('question.id', questionsIds)
-      .groupBy('question.id');
-    console.log('questions');
-    console.log(questions);
-    return questions;
+      .sum('question.point as sum')
+      .whereIn('question.id', questionsIds);
+    return questions[0].sum;
     // sum points
+  }
+
+  static async getAllQuestionsPoints() {
+    return db('question')
+      .sum('question.point as points')
+      .then((res) => res[0].points);
   }
   // insert
 

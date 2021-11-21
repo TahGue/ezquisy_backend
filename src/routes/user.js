@@ -24,15 +24,15 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   asyncMiddleware(async (req, res) => {
     const [user] = req.user;
-    console.log('user');
-    console.log(user);
     const userPoints = await User.getPoints(user.id);
 
+    const allQuestionsPoints = await User.getAllQuestionsPoints();
     const results = {
       ...user,
       userPoints,
+      allPoints: allQuestionsPoints,
     };
-    return res.json(req.user);
+    return res.json(results);
   })
 );
 

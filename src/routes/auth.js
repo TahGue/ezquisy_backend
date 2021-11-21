@@ -13,8 +13,6 @@ router.post(
   '/login',
   asyncMiddleware(async (req, res) => {
     // recieve email password
-    console.log('req.body');
-    console.log(req.body);
     const { email, password } = req.body;
 
     // check email is exist
@@ -58,7 +56,6 @@ router.post(
   '/register',
   asyncMiddleware(async (req, res) => {
     // fetch data from register form
-    console.log (req.body);
     const { name, email, password, image } = req.body;
     // check if email is exist in db
     const [userByEmail] = await User.getByEmail(email);
@@ -74,8 +71,8 @@ router.post(
         User.insert({
           name,
           email,
-          image:"",
-          role:"user",
+          image: '',
+          role: 'user',
           password: hash,
         }).then((us) => res.send(us));
       });
