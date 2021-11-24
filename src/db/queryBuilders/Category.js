@@ -27,7 +27,8 @@ class Category {
       .select('answer.*')
       .join('answeruser', 'answeruser.answer_id', '=', 'answer.id')
       .where('answeruser.user_id', '=', userId)
-      .where('answer.is_correct', '=', 'true');
+      .where('answer.is_correct', '=', 'true')
+      .orWhere('answer.is_correct', '=', 1);
     // fetch questions by step 1
     const questionsIds = userAnswers.map((ans) => ans.question_id);
 
