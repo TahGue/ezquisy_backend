@@ -18,16 +18,18 @@ class User {
 
   static async getPoints(userId) {
     // step 1 fetch correct answers by user
+console.log(userId)
 
     const userAnswers = await db('answer')
-      .select('answer.*')
+      .select('answer.*',"answeruser.user_id")
       .join('answeruser', 'answeruser.answer_id', '=', 'answer.id')
       .where('answeruser.user_id', '=', userId)
-      .where('answer.is_correct', '=', 'true')
-      .orWhere('answer.is_correct', '=', 1);
+      .andWhere('answer.is_correct', '=', 1)
+      
     // fetch questions by step 1
     const questionsIds = userAnswers.map((ans) => ans.question_id);
-
+console.log("userAnswers")
+console.log(userAnswers)
     const questions = await db('question')
       .sum('question.point as sum')
       .whereIn('question.id', questionsIds);
